@@ -1,0 +1,62 @@
+{
+  "variables": {
+    "vpc": "{{env `BUILD_VPC_ID`}}",
+    "subnet": "{{env `BUILD_SUBNET_ID`}}",
+    "aws_region": "{{env `AWS_REGION`}}",
+    "ami_name": "CentOS8Hardened-{{isotime \"02-Jan-06 03_04_05\"}}"
+  },
+  "builders": [{
+    "name": "AWS AMI Builder - Centos 8 CIS",
+    "type": "amazon-ebs",
+    "region": "{{user `aws_region`}}",
+    "source_ami_filter": {
+      "filters": {
+        "virtualization-type": "hvm",
+        "name": "CentOS 8.* x86_64",
+        "root-device-type": "ebs"
+      },
+      "owners": [ "125523088429" ],
+      "most_recent": true
+    },
+    "instance_type": "t2.micro",
+    "ssh_username": "centos",
+    "ami_name": "{{user `ami_name` | clean_ami_name}}",
+    "tags": {
+      "Name": "{{user `ami_name`}}"
+    },
+    "run_tags": {
+      "Name": "{{user `ami_name`}}"
+    },
+    "run_volume_tags": {
+      "Name": "{{user `ami_name`}}"
+    },
+    "snapshot_tags": {
+      "Name": "{{user `ami_name`}}"
+    },
+    "ami_description": "CIS Hardened CentOS 8 Image",
+    "associate_public_ip_address": "true",
+    "vpc_id": "{{user `vpc`}}",
+    "subnet_id": "{{user `subnet`}}"
+  }],
+  "provisioners": [{
+      "type": "shell",
+      "inline": [
+        "sudo pip install ansible==2.7.9"
+      ]
+    },
+    {
+      "type": "ansible-local",
+      "playbook_file": "ansible/playbook.yaml",
+      "role_paths": [
+        "ansible/roles/common"
+      ],
+      "playbook_dir": "ansible",
+      "galaxy_file": "ansible/requirements.yaml"
+    },
+    {
+      "type": "shell",
+      "inline": [
+        "rm .ssh/authorized_keys ; sudo rm /root/.ssh/authorized_keys"
+      ]
+    }
+  ]
