@@ -65,6 +65,8 @@ workflows:
     jobs:
       - tests
       - packer-build:
+          requires:
+            - test
           filters:
             branches:
               only: master
