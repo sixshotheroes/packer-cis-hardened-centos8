@@ -41,7 +41,8 @@
   "provisioners": [{
       "type": "shell",
       "inline": [
-        "sudo pip install ansible==2.7.9"
+        "sudo dnf install python3-paramiko"
+        "sudo pip3 install ansible"
       ]
     },
     {
