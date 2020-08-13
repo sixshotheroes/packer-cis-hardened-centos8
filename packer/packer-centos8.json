@@ -20,7 +20,7 @@
     },
     "instance_type": "t2.micro",
     "ssh_username": "centos",
-    "ami_name": "{{user `ami_name` | clean_ami_name}}",
+    "ami_name": "{{user `ami_name` }}",
     "tags": {
       "Name": "{{user `ami_name`}}"
     },
