@@ -41,7 +41,7 @@
   "provisioners": [{
       "type": "shell",
       "inline": [
-        "sudo dnf install python3-paramiko",
+        "sudo yum install python3-devel",
         "sudo pip3 install ansible"
       ]
     },
