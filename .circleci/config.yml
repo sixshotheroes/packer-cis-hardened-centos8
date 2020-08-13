@@ -1,0 +1,70 @@
+version: 2.1
+
+
+commands:
+  setup-environment-vars:
+    description: "Setup environment variables."
+    steps:
+      - run:
+          name: Export required environment variables.
+          command: |
+            #Example of interpolation within CircleCI
+            #export INTERPOLATE_VAR=${A}${B}
+            cat \<<EOF >> $BASH_ENV
+            #Export any extra variables that require interpolation here OR vararibles that do not require encryption.
+            #export EXAMPLE_VAR=INTERPOLATE_VAR
+            #export NOT_SECECRET="nonsecret stuff"
+            #If you need CircleCI to do other than apply your terraform code change the command here.
+            export BUILD_VPC_ID="vpc-0c724c708a627b72b"
+            export BUILD_SUBNET_ID="subnet-0fcb304fa891fab95"
+            export AWS_REGION="us-east-1"
+
+
+            EOF
+  build:
+    description: "Run a packer build"
+    parameters:
+      template:
+        description: |
+          The name of the packer template file
+        type: string
+        default: packer.json
+      args:
+        description: |
+          Arguments to pass to the packer build command
+        type: string
+        default: ""
+
+    steps:
+      - run:
+          name: "Run a packer build"
+          command: packer build << parameters.args >> << parameters.template >>
+jobs:
+
+  tests:
+    docker:
+      - image: hashicorp/packer:latest
+    steps:
+      - checkout
+      - setup-environment-vars
+
+  packer-build:
+    docker:
+      - image: hashicorp/packer:latest
+    steps:
+      - checkout
+      - setup-environment-vars
+      - build:
+          template: packer/packer-centos8.json
+          args: ""
+
+#These are the workflows that define what CircleCI actually does.
+workflows:
+  version: 2.1
+  terraform:
+    jobs:
+      - test
+      - build:
+          filters:
+            branches:
+              only: master
