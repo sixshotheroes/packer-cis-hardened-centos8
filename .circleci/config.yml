@@ -21,6 +21,21 @@ commands:
 
 
             EOF
+
+  run-tests:
+    description: "Run tests against ansible and packer config"
+    parameters:
+      template:
+        description: |
+          The name of the packer template file
+        type: string
+        default: packer.json
+    steps:
+      - run:
+          name: "Run a packer build"
+          command: |
+            # Add ansible here!!!!!!
+            packer validate << parameters.template >>
   build:
     description: "Run a packer build"
     parameters:
@@ -47,7 +62,9 @@ jobs:
     steps:
       - checkout
       - setup-environment-vars
-
+      - run-tests:
+          template: packer/packer-centos8.json
+          
   packer-build:
     docker:
       - image: hashicorp/packer:latest
