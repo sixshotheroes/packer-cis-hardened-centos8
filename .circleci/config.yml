@@ -61,9 +61,9 @@ jobs:
 #These are the workflows that define what CircleCI actually does.
 workflows:
   version: 2.1
-  terraform:
+  packer-ansible:
     jobs:
-      - test
+      - tests
       - build:
           filters:
             branches:
