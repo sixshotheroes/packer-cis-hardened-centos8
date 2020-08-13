@@ -42,7 +42,7 @@
   "provisioners": [{
       "type": "shell",
       "inline": [
-        "sudo yum install python3-devel",
+        "sudo yum install python3-devel -y",
         "sudo pip3 install ansible"
       ]
     },
