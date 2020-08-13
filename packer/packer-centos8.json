@@ -20,6 +20,7 @@
     },
     "instance_type": "t2.micro",
     "ssh_username": "centos",
+    "ssh_timeout": "5m",
     "ami_name": "{{user `ami_name` }}",
     "tags": {
       "Name": "{{user `ami_name`}}"

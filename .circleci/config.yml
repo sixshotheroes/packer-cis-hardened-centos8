@@ -32,7 +32,7 @@ commands:
         default: packer.json
     steps:
       - run:
-          name: "Run a packer build"
+          name: "Run tests against ansible and packer."
           command: |
             # Add ansible here!!!!!!
             packer validate << parameters.template >>
@@ -64,7 +64,7 @@ jobs:
       - setup-environment-vars
       - run-tests:
           template: packer/packer-centos8.json
-          
+
   packer-build:
     docker:
       - image: hashicorp/packer:latest
