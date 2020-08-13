@@ -64,7 +64,7 @@ workflows:
   packer-ansible:
     jobs:
       - tests
-      - build:
+      - packer-build:
           filters:
             branches:
               only: master
